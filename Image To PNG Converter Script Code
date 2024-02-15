@@ -1,0 +1,112 @@
+<!DOCTYPE Html>
+<Html Lang="En">
+<Head>
+    <Meta Charset="UTF-8">
+    <Meta Name="Viewport" Content="Width=Device-Width, Initial-Scale=1.0">
+    <Title>Image To PNG Converter</Title>
+    <Style>
+        Body {
+            Font-Family: Arial, Sans-Serif;
+            Text-Align: Center;
+            Background-Color: #F0f0f0;
+        }
+
+        #Container {
+            Max-Width: 600px;
+            Margin: 0 Auto;
+            Padding: 20px;
+            Background-Color: #Fff;
+            Box-Shadow: 0 0 10px Rgba(0, 0, 0, 0.2);
+            Border-Radius: 10px;
+        }
+
+        H1 {
+            Color: #3498db;
+        }
+
+        #ImageInput {
+            Display: None;
+        }
+
+        Label {
+            Display: Inline-Block;
+            Padding: 10px 20px;
+            Background-Color: #3498db;
+            Color: #Fff;
+            Cursor: Pointer;
+            Border-Radius: 5px;
+            Margin-Top: 20px;
+        }
+
+        #Output {
+            Margin-Top: 20px;
+        }
+
+        #Preview {
+            Margin-Top: 20px;
+        }
+
+        #DownloadButton {
+            Margin-Top: 20px;
+        }
+
+        #DownloadButton A {
+            Display: Inline-Block;
+            Padding: 10px 20px;
+            Background-Color: #27ae60;
+            Color: #Fff;
+            Text-Decoration: None;
+            Border-Radius: 5px;
+            Margin-Top: 20px;
+            Font-Weight: Bold;
+        }
+
+        #DownloadButton A:Hover {
+            Background-Color: #1e8449;
+        }
+    </Style>
+</Head>
+<Body>
+    <Div Id="Container">
+        <H1>Image To PNG Converter</H1>
+        <Label For="ImageInput">Select Image</Label>
+        <Input Type="File" Id="ImageInput" Accept="Image/*">
+        <Div Id="Output"></Div>
+        <Div Id="Preview"></Div>
+        <Div Id="DownloadButton"></Div>
+    </Div>
+
+    <Script>
+        Const ImageInput = Document.GetElementById('ImageInput');
+        Const Output = Document.GetElementById('Output');
+        Const Preview = Document.GetElementById('Preview');
+        Const DownloadButton = Document.GetElementById('DownloadButton');
+
+        ImageInput.AddEventListener('Change', () => {
+            Const File = ImageInput.Files[0];
+
+            If (File) {
+                If (File.Type.StartsWith('Image/')) {
+                    Const Reader = New FileReader();
+                    Reader.Onload = (E) => {
+                        Const ImgDataUrl = E.Target.Result;
+                        Output.InnerHTML = '';
+                        Preview.InnerHTML = `<H2>Preview:</H2><Img Src="${ImgDataUrl}" Alt="Preview" Style="Max-Width: 100%;">`;
+                        Const DownloadLink = Document.CreateElement('A');
+                        DownloadLink.Href = ImgDataUrl;
+                        DownloadLink.Download = 'Image.Png';
+                        DownloadLink.InnerText = 'Download PNG';
+                        DownloadButton.InnerHTML = '';
+                        DownloadButton.AppendChild(DownloadLink);
+                    };
+                    Reader.ReadAsDataURL(File);
+                } Else {
+                    Output.InnerHTML = 'Please Select A Valid Image File.';
+                    Preview.InnerHTML = '';
+                    DownloadButton.InnerHTML = '';
+                }
+            }
+        });
+    </Script>
+</Body>
+</Html>
